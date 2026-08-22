@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-[var(--bg-canvas)] text-[var(--text-primary)] antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-200">
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark`}>
+      <body className="bg-[#0b0f19] text-gray-100 antialiased selection:bg-indigo-500 selection:text-white">
         <Providers>
           <div className="relative min-h-screen flex flex-col">
             <HUDNav />

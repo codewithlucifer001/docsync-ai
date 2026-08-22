@@ -1,44 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Terminal, Activity, FileText, Sun, Moon, LogIn, LogOut, Github } from "lucide-react";
+import { Terminal, Activity, FileText, Github, LogOut } from "lucide-react";
 import { DocSyncLogo } from "@/components/ui/DocSyncLogo";
 
 export function HUDNav() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = (localStorage.getItem("docsync_theme") as "dark" | "light") || "dark";
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
-
-  const applyTheme = (t: "dark" | "light") => {
-    const root = document.documentElement;
-    if (t === "light") {
-      root.classList.remove("dark");
-      root.classList.add("light");
-      root.setAttribute("data-theme", "light");
-    } else {
-      root.classList.remove("light");
-      root.classList.add("dark");
-      root.setAttribute("data-theme", "dark");
-    }
-  };
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    localStorage.setItem("docsync_theme", nextTheme);
-    applyTheme(nextTheme);
-  };
 
   const links = [
     { href: "/dashboard", label: "Telemetry", icon: Activity },
@@ -48,12 +19,12 @@ export function HUDNav() {
 
   return (
     <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
-      <nav className="flex items-center justify-between px-6 py-3 rounded-full border border-[var(--border-glow)] bg-[var(--bg-surface)]/80 backdrop-blur-xl shadow-2xl transition-colors">
+      <nav className="flex items-center justify-between px-6 py-3 rounded-full border border-gray-800 bg-gray-900/90 backdrop-blur-xl shadow-2xl">
         <Link href="/" className="flex items-center gap-2 hover:opacity-85 transition-opacity">
           <DocSyncLogo size={26} showText={true} />
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-1">
             {links.map((link) => {
               const Icon = link.icon;
@@ -64,8 +35,8 @@ export function HUDNav() {
                   href={link.href}
                   className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium font-mono transition-all ${
                     isActive
-                      ? "bg-[var(--accent-primary)] text-white shadow-md shadow-indigo-500/20"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
+                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
+                      : "text-gray-400 hover:text-white hover:bg-gray-800"
                   }`}
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -75,57 +46,43 @@ export function HUDNav() {
             })}
           </div>
 
-          <div className="h-4 w-[1px] bg-[var(--border-subtle)] mx-1" />
+          <div className="h-4 w-[1px] bg-gray-800 mx-1 hidden sm:block" />
 
           {status === "authenticated" && session?.user ? (
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-gray-800 border border-gray-700">
                 {session.user.image ? (
                   <img
                     src={session.user.image}
-                    alt={session.user.name || "User"}
-                    className="h-5 w-5 rounded-full border border-[var(--accent-primary)]"
+                    alt="User"
+                    className="h-4 w-4 rounded-full border border-indigo-500"
                   />
                 ) : (
-                  <Github className="h-4 w-4 text-[var(--accent-primary)]" />
+                  <Github className="h-3.5 w-3.5 text-indigo-400" />
                 )}
-                <span className="text-xs font-mono font-medium text-[var(--text-primary)] max-w-[100px] truncate hidden md:inline">
+                <span className="text-xs font-mono font-medium text-gray-200 max-w-[100px] truncate hidden md:inline">
                   {session.user.name || "GitHub User"}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => signOut()}
-                aria-label="Sign out"
+                className="p-1.5 rounded-full border border-gray-800 bg-gray-800 text-rose-400 hover:text-rose-300 transition-all cursor-pointer"
                 title="Sign out"
-                className="p-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-rose-400 hover:text-rose-300 hover:border-rose-500/40 transition-all cursor-pointer"
               >
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-3.5 w-3.5" />
               </button>
             </div>
           ) : (
             <button
               type="button"
               onClick={() => signIn("github")}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--accent-primary)] text-white text-xs font-mono font-semibold hover:bg-indigo-500 transition-all shadow-md shadow-indigo-500/20 active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-mono font-semibold transition-all shadow-md shadow-indigo-500/20 active:scale-95 cursor-pointer"
             >
               <Github className="h-3.5 w-3.5" />
               <span>Sign In</span>
             </button>
           )}
-
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label="Toggle Theme"
-            className="p-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent-primary)] transition-all cursor-pointer shadow-sm active:scale-90"
-          >
-            {mounted && theme === "light" ? (
-              <Moon className="h-4 w-4 text-indigo-500" />
-            ) : (
-              <Sun className="h-4 w-4 text-amber-400" />
-            )}
-          </button>
         </div>
       </nav>
     </header>
