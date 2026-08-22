@@ -86,7 +86,8 @@ export default function DashboardPage() {
     setGeneratingId(repo.id);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/generate", {
+      // Call internal Next.js API route directly (compatible with Vercel deployment)
+      const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -95,11 +96,7 @@ export default function DashboardPage() {
           files: [
             {
               filename: "src/api/routes.ts",
-              content: "export async function GET(req: Request) { return Response.json({ message: 'OK' }); }\nexport async function POST(req: Request) { return Response.json({ created: true }); }"
-            },
-            {
-              filename: "src/auth/service.py",
-              content: "@app.get('/verify')\ndef verify_token():\n    return {'status': 'active'}"
+              content: "export async function GET() { ... }"
             }
           ]
         })
