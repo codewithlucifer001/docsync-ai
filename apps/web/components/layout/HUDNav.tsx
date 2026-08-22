@@ -15,20 +15,29 @@ export function HUDNav() {
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem("docsync_theme") as "dark" | "light" | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle("light", savedTheme === "light");
-      document.documentElement.setAttribute("data-theme", savedTheme);
-    }
+    const savedTheme = (localStorage.getItem("docsync_theme") as "dark" | "light") || "dark";
+    setTheme(savedTheme);
+    applyTheme(savedTheme);
   }, []);
+
+  const applyTheme = (t: "dark" | "light") => {
+    const root = document.documentElement;
+    if (t === "light") {
+      root.classList.remove("dark");
+      root.classList.add("light");
+      root.setAttribute("data-theme", "light");
+    } else {
+      root.classList.remove("light");
+      root.classList.add("dark");
+      root.setAttribute("data-theme", "dark");
+    }
+  };
 
   const toggleTheme = () => {
     const nextTheme = theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
     localStorage.setItem("docsync_theme", nextTheme);
-    document.documentElement.classList.toggle("light", nextTheme === "light");
-    document.documentElement.setAttribute("data-theme", nextTheme);
+    applyTheme(nextTheme);
   };
 
   const links = [
@@ -68,7 +77,6 @@ export function HUDNav() {
 
           <div className="h-4 w-[1px] bg-[var(--border-subtle)] mx-1" />
 
-          {/* GitHub Authentication Button */}
           {status === "authenticated" && session?.user ? (
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">
@@ -89,7 +97,7 @@ export function HUDNav() {
                 type="button"
                 onClick={() => signOut()}
                 aria-label="Sign out"
-                title="Sign out of GitHub"
+                title="Sign out"
                 className="p-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-rose-400 hover:text-rose-300 hover:border-rose-500/40 transition-all cursor-pointer"
               >
                 <LogOut className="h-4 w-4" />
@@ -106,7 +114,6 @@ export function HUDNav() {
             </button>
           )}
 
-          {/* Theme Toggle Button */}
           <button
             type="button"
             onClick={toggleTheme}
