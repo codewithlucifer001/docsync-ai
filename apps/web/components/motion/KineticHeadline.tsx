@@ -1,35 +1,38 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 interface KineticHeadlineProps {
   text: string;
-  className?: string;
   highlightWords?: string[];
+  className?: string;
 }
 
 export function KineticHeadline({
   text,
-  className = "",
-  highlightWords = []
+  highlightWords = [],
+  className = ""
 }: KineticHeadlineProps) {
   const words = text.split(" ");
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({
+    visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.06, delayChildren: 0.04 * i }
-    })
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1
+      }
+    }
   };
 
-  const childVariants = {
+  const childVariants: Variants = {
     hidden: {
       opacity: 0,
-      y: 24,
-      rotateX: 45,
-      filter: "blur(6px)"
+      y: 20,
+      rotateX: -40,
+      filter: "blur(4px)"
     },
     visible: {
       opacity: 1,
@@ -37,29 +40,27 @@ export function KineticHeadline({
       rotateX: 0,
       filter: "blur(0px)",
       transition: {
-        type: "spring",
-        damping: 18,
-        stiffness: 120
+        type: "spring" as const,
+        damping: 14,
+        stiffness: 100
       }
     }
   };
 
   return (
     <motion.h1
-      className={`flex flex-wrap gap-x-[0.3em] gap-y-[0.1em] font-extrabold tracking-tight ${className}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
+      className={`font-extrabold tracking-tight perspective-1000 ${className}`}
     >
       {words.map((word, index) => {
-        const isHighlighted = highlightWords.includes(
-          word.replace(/[^a-zA-Z0-9]/g, "")
-        );
+        const isHighlighted = highlightWords.includes(word);
         return (
           <motion.span
             key={index}
             variants={childVariants}
-            className={`inline-block ${
+            className={`inline-block mr-[0.25em] ${
               isHighlighted
                 ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-cyan)] bg-clip-text text-transparent"
                 : "text-[var(--text-primary)]"
