@@ -1,0 +1,19 @@
+name: 'DocSync AI Ast-To-Docs'
+description: 'Autonomous AST doc generation and drift prevention engine.'
+author: 'DocSync AI'
+inputs:
+  docsync-api-url:
+    description: 'URL of the running DocSync parser service'
+    required: false
+    default: 'http://localhost:8000'
+  target-branch:
+    description: 'Branch to commit generated documentation into'
+    required: false
+    default: 'docsync-updates'
+  github-token:
+    description: 'GITHUB_TOKEN for creating branches and PRs'
+    required: true
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

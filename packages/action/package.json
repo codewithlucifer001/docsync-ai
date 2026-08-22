@@ -1,0 +1,9 @@
+{
+  "name": "@docsync/action",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node src/index.js"
+  }
+}

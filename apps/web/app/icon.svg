@@ -1,0 +1,11 @@
+<svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="docsync-grad-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#6366F1" />
+      <stop offset="100%" stopColor="#06B6D4" />
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="36" height="36" rx="9" fill="#0B0F19" stroke="url(#docsync-grad-primary)" stroke-width="2"/>
+  <path d="M10 13C10 11.8954 10.8954 11 12 11H20L25 16V27C25 28.1046 24.1046 29 23 29H12C10.8954 29 10 28.1046 10 27V13Z" fill="#1E293B" stroke="#475569" stroke-width="1.5"/>
+  <circle cx="28" cy="12" r="4.5" fill="url(#docsync-grad-primary)" stroke="#0B0F19" stroke-width="1.5"/>
+</svg>

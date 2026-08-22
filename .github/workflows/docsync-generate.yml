@@ -1,0 +1,25 @@
+name: DocSync AI Auto Sync
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  sync-documentation:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run DocSync AI Pipeline
+        uses: docsync-ai/action@v1
+        with:
+          docsync-api-url: ${{ secrets.DOCSYNC_API_URL || 'https://api.docsync.dev' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
