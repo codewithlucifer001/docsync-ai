@@ -1,26 +1,19 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
-const clientId = process.env.GITHUB_ID || "";
-const clientSecret = process.env.GITHUB_SECRET || "";
-
-export const authOptions: NextAuthOptions = {
+export const authOptions: AuthOptions = {
   providers: [
-    ...(clientId && clientSecret
-      ? [
-          GithubProvider({
-            clientId,
-            clientSecret,
-            authorization: {
-              params: {
-                scope: "read:user user:email repo"
-              }
-            }
-          })
-        ]
-      : [])
+    GithubProvider({
+      clientId: process.env.GITHUB_ID || "Ov23liynKcxPIEvUcGam",
+      clientSecret: process.env.GITHUB_SECRET || "c9248212df71906a3b8b9c8227149515e08ac1a4",
+      authorization: {
+        params: {
+          scope: "read:user user:email repo"
+        }
+      }
+    })
   ],
-  secret: process.env.NEXTAUTH_SECRET || "docsync_default_local_secret_2026",
+  secret: process.env.NEXTAUTH_SECRET || "docsync_secret_production_2026",
   session: {
     strategy: "jwt"
   },
@@ -39,4 +32,5 @@ export const authOptions: NextAuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
