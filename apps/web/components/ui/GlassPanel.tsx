@@ -1,38 +1,22 @@
-"use client";
-
 import React from "react";
-import { cn } from "@/lib/utils";
-import { useCursorStore } from "@/hooks/useMagneticCursor";
 
 interface GlassPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  interactive?: boolean;
-  glowOnHover?: boolean;
+  className?: string;
+  glow?: boolean;
 }
 
 export function GlassPanel({
   children,
-  className,
-  interactive = false,
-  glowOnHover = false,
+  className = "",
+  glow = false,
   ...props
 }: GlassPanelProps) {
-  const { setVariant, resetVariant } = useCursorStore();
-
   return (
     <div
-      className={cn(
-        "relative rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-6 backdrop-blur-[var(--blur-panel)] transition-all duration-300",
-        interactive && "cursor-pointer active:scale-[0.98]",
-        glowOnHover && "hover:border-[var(--border-glow)] hover:shadow-lg hover:shadow-indigo-500/10",
-        className
-      )}
-      onMouseEnter={() => {
-        if (interactive) setVariant("magnetic");
-      }}
-      onMouseLeave={() => {
-        if (interactive) resetVariant();
-      }}
+      className={`rounded-2xl border ${
+        glow ? "border-[var(--border-glow)] shadow-lg shadow-indigo-500/10" : "border-[var(--border-subtle)]"
+      } bg-[var(--bg-surface)] backdrop-blur-xl transition-all duration-200 ${className}`}
       {...props}
     >
       {children}
